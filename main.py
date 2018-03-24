@@ -72,15 +72,31 @@ class Repository:
 
         buf = StringIO()
         sh.git(
-            'rev-list', '--all', _out=buf,
+            'rev-list', '--all', '--reverse', _out=buf,
             _cwd=wd)
         return buf.getvalue().split()
+
+    def parse_commits(self, commits: Optional[List[str]]) -> List[str]:
+        all_commits = self.list_commits()
+        if commits is None:
+            return all_commits
+
+        new_commits = []
+        for commit in commits:
+            if '..' in commit:
+                com1, com2 = commit.split('..')
+                idx1, idx2 = all_commits.index(com1), all_commits.index(com2)
+                new_commits.extend(all_commits[idx1:idx2+1])
+            else:
+                new_commits.append(commit)
+
+        return new_commits
 
     def run(self, commits: Optional[List[str]] = None) -> List:
         self.clone()
 
         stats = []
-        commits = commits or self.list_commits()
+        commits = self.parse_commits(commits)
 
         for commit in tqdm(commits, desc='Commit history'):
             res = self.handle_commit(commit)
@@ -92,7 +108,7 @@ class Repository:
         tmp = []
         for commit, jobs in data:
             for name, duration in jobs:
-                tmp.append((commit[:5], name, duration))
+                tmp.append((commit[:7], name, duration))
         df = pd.DataFrame(tmp, columns=['commit', 'job', 'time'])
 
         # plot
