@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import sh
 from tqdm import tqdm
 
-from .utils import load_config
+from .utils import load_config, expand_commit_range
 
 
 class Repository:
@@ -103,9 +103,8 @@ class Repository:
         new_commits = []
         for commit in commits:
             if '..' in commit:
-                com1, com2 = commit.split('..')
-                idx1, idx2 = all_commits.index(com1), all_commits.index(com2)
-                new_commits.extend(all_commits[idx1:idx2+1])
+                new_commits.extend(
+                    expand_commit_range(commit, all_commits))
             else:
                 new_commits.append(commit)
 
