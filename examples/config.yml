@@ -2,8 +2,6 @@ init_script: setup.sh
 jobs:
     - name: Main Pipeline Execution
       command: execute_pipeline.sh
-      # comparison: diff
-      # files:
-      #   - result01.txt
-      #   - result02.txt
+      files:
+        - result.csv
 working_directory: tmp
