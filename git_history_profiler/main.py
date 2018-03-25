@@ -47,7 +47,7 @@ class Repository:
                 _cwd=self.config['working_directory'])
 
     def clean(self) -> None:
-        sh.git.checkout('.', _cwd=self.repo_dir)
+        sh.git.clean('-f', '-d', _cwd=self.repo_dir)
 
     def switch_to_commit(self, commit_id: str) -> None:
         # switch to commit
