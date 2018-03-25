@@ -1,2 +1,1 @@
-echo execute
-sleep 1
+./pipeline.sh

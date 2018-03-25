@@ -16,3 +16,9 @@ Options:
   -c, --commit TEXT  Commit id to consider.
   --help             Show this message and exit.
 ```
+
+Try out the example:
+```bash
+$ examples/create_test_repository.sh test_repo
+$ python main.py test_repo --config examples/config.yml
+```

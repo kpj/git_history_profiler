@@ -1,5 +1,6 @@
 import os
 import time
+import shutil
 from io import StringIO
 
 from typing import Optional, Dict, List
@@ -29,34 +30,41 @@ class Repository:
         self.config = load_config(config)
         os.makedirs(self.config['working_directory'])
 
+    @property
+    def repo_dir(self) -> str:
+        return os.path.abspath(os.path.join(
+            self.config['working_directory'], 'repo'))
+
     def clone(self) -> None:
-        sh.git.clone(self.url, 'repo', _cwd=self.config['working_directory'])
+        if os.path.exists(self.url):
+            # is local
+            shutil.copytree(self.url, self.repo_dir)
+        else:
+            # is remote
+            sh.git.clone(
+                self.url, 'repo',
+                _cwd=self.config['working_directory'])
 
     def clean(self) -> None:
-        wd = os.path.join(self.config['working_directory'], 'repo')
-        sh.git.checkout('.', _cwd=wd)
+        sh.git.checkout('.', _cwd=self.repo_dir)
 
     def switch_to_commit(self, commit_id: str) -> None:
-        wd = os.path.join(self.config['working_directory'], 'repo')
-
         # switch to commit
-        sh.git.checkout(commit_id, _cwd=wd)
+        sh.git.checkout(commit_id, _cwd=self.repo_dir)
 
         # prepare environment
         cmd_path = os.path.join(self.config_dir, self.config['init_script'])
-        os.system(f'cd "{wd}" && {cmd_path} > /dev/null')
+        os.system(f'{cmd_path} "{self.repo_dir}" > /dev/null')
 
     def execute(self) -> List:
-        wd = os.path.join(self.config['working_directory'], 'repo')
-
         stats = []
         for job in tqdm(self.config['jobs'], desc='Jobs'):
             cmd_path = os.path.join(self.config_dir, job['command'])
             # cmd = sh.Command(cmd_path)
 
             start = time.time()
-            # cmd(_cwd=wd)
-            os.system(f'cd "{wd}" && {cmd_path} > /dev/null')
+            # cmd(_cwd=self.repo_dir)
+            os.system(f'cd "{self.repo_dir}" && {cmd_path} > /dev/null')
             dur = time.time() - start
 
             stats.append((job['name'], dur))
@@ -68,12 +76,10 @@ class Repository:
         return self.execute()
 
     def list_commits(self) -> List[str]:
-        wd = os.path.join(self.config['working_directory'], 'repo')
-
         buf = StringIO()
         sh.git(
             'rev-list', '--all', '--reverse', _out=buf,
-            _cwd=wd)
+            _cwd=self.repo_dir)
         return buf.getvalue().split()
 
     def parse_commits(self, commits: Optional[List[str]]) -> List[str]:
@@ -138,7 +144,7 @@ def main(repo_url: str, config: str, commit: List[str]) -> None:
     """
     repo = Repository(repo_url, config)
 
-    res = repo.run(commit)
+    res = repo.run(commit if len(commit) > 0 else None)
     repo.plot(res)
 
 
