@@ -12,6 +12,7 @@ def tempconfig(tmpdir):
         fd.write('working_directory: tmp')
     return fname
 
+
 def test_config(tempconfig):
     config = load_config(tempconfig)
     assert config['working_directory'] == 'tmp'
