@@ -2,7 +2,7 @@ import os
 
 import pytest
 
-from git_history_profiler.utils import load_config
+from ..utils import load_config
 
 
 @pytest.fixture
