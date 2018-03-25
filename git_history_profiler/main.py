@@ -76,9 +76,11 @@ class Repository:
             os.makedirs(result_cache)
             for fname in job['files']:
                 fpath = os.path.join(self.repo_dir, fname)
-                shutil.copy(fpath, result_cache)
-                result_files.append(
-                    os.path.join(result_cache, fname))
+                rpath = os.path.join(result_cache, fname)
+
+                os.makedirs(os.path.dirname(rpath), exist_ok=True)
+                shutil.copy(fpath, rpath)
+                result_files.append((fname, rpath))
 
             stats.append((commit_id, job['name'], dur, result_files))
         return stats
@@ -150,9 +152,9 @@ class Repository:
         # gather data
         data = []
         for row in df.itertuples():
-            for fpath in row.result_files:
+            for fname, fpath in row.result_files:
                 fsize = os.path.getsize(fpath)
-                data.append((row.commit, os.path.basename(fpath), fsize))
+                data.append((row.commit, fname, fsize))
         df = pd.DataFrame(data, columns=['commit', 'result_file', 'size'])
 
         # plot result

@@ -3,5 +3,5 @@ jobs:
     - name: Main Pipeline Execution
       command: execute_pipeline.sh
       files:
-        - result.csv
+        - results/output.csv
 working_directory: tmp
