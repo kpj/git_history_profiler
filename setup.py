@@ -5,7 +5,7 @@ setup(
     name='git_history_profiler',
     version='0.0.1',
 
-    description='Performance and and stability profiling over the git commit history.',
+    description='Performance and stability profiling over commit historys.',
 
     setup_requires=['setuptools-markdown'],
     long_description_markdown_filename='README.md',

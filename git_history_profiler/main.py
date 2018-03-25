@@ -3,10 +3,9 @@ import time
 import shutil
 from io import StringIO
 
-from typing import Optional, Dict, List
+from typing import Optional, List
 
 import sh
-import yaml
 import click
 
 import pandas as pd
@@ -16,10 +15,7 @@ import matplotlib.pyplot as plt
 
 from tqdm import tqdm
 
-
-def load_config(fname: str) -> Dict:
-    with open(fname) as fd:
-        return yaml.load(fd)
+from .utils import load_config
 
 
 class Repository:
@@ -140,7 +136,7 @@ class Repository:
     '-c', '--commit', multiple=True,
     help='Commit id to consider.')
 def main(repo_url: str, config: str, commit: List[str]) -> None:
-    """ Performance and and stability profiling over the git commit history.
+    """ Performance and stability profiling over the git commit history.
     """
     repo = Repository(repo_url, config)
 
