@@ -4,4 +4,4 @@ jobs:
       command: execute_pipeline.sh
       files:
         - results/output.csv
-working_directory: tmp
+working_directory: profiling_results
