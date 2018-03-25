@@ -26,6 +26,6 @@ Options:
 
 Try out the example:
 ```bash
-$ examples/create_test_repository.sh test_repo
-$ git_history_profiler test_repo --config examples/config.yml
+$ ./examples/create_test_repository.sh ./test_repo
+$ git_history_profiler ./test_repo --config ./examples/config.yml
 ```
