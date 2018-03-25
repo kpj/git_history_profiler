@@ -1,6 +1,7 @@
 # git_history_profiler
 
 [![PyPI](https://img.shields.io/pypi/v/git_history_profiler.svg?style=flat)](https://pypi.org/project/git-history-profiler/)
+[![Build Status](https://travis-ci.org/kpj/git_history_profiler.svg?branch=master)](https://travis-ci.org/kpj/git_history_profiler)
 
 Performance and stability profiling over the git commit history.
 
