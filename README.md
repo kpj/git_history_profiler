@@ -1,6 +1,14 @@
-# GitHistoryProfiler
+# git_history_profiler
+
+[![PyPI](https://img.shields.io/pypi/v/git_history_profiler.svg?style=flat)](https://pypi.org/project/git-history-profiler/)
 
 Performance and stability profiling over the git commit history.
+
+## Installation
+
+```bash
+$ pip install git_history_profiler
+```
 
 ## Usage
 
