@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='git_history_profiler',
-    version='0.0.1',
+    version='0.0.2',
 
     description='Performance and stability profiling over commit historys.',
 
